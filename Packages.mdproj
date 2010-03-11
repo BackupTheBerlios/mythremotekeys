@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ItemType>PackagingProject</ItemType>
+    <ProductVersion>8.0.50727</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{5488E668-6DB0-4639-AAE9-670D476AAE55}</ProjectGuid>
+    <Packages>
+      <Packages xmlns="">
+        <Package name="Tarball">
+          <Builder TargetDirectory="/var/lib/tob/Projects/MythRemoteKeyboard/MythRemoteKeyboard" DefaultConfiguration="Debug" ctype="TarballDeployTarget">
+            <ChildEntries>
+              <SolutionItemReference path="MythRemoteKeyboard\MythRemoteKeyboard.csproj" />
+            </ChildEntries>
+            <RootEntry path="MythRemoteKeyboard.sln" id="MythRemoteKeyboard" />
+          </Builder>
+        </Package>
+      </Packages>
+    </Packages>
+  </PropertyGroup>
+</Project>

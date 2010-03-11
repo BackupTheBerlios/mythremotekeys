@@ -1,0 +1,32 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 9.00
+# Visual Studio 2005
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MythRemoteKeyboard", "MythRemoteKeyboard\MythRemoteKeyboard.csproj", "{870E5E3B-BA69-422C-8EB3-37B5625D05D9}"
+EndProject
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "Packages", "Packages.mdproj", "{5488E668-6DB0-4639-AAE9-670D476AAE55}"
+EndProject
+Project("{9344bdbb-3e7f-41fc-a0dd-8665d75ee146}") = "MythRemoteKeyboardTranslation", "MythRemoteKeyboardTranslation\MythRemoteKeyboardTranslation.mdproj", "{226446BE-E7BD-4AC5-ADF1-2D186795BBB0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{226446BE-E7BD-4AC5-ADF1-2D186795BBB0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{226446BE-E7BD-4AC5-ADF1-2D186795BBB0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{226446BE-E7BD-4AC5-ADF1-2D186795BBB0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{226446BE-E7BD-4AC5-ADF1-2D186795BBB0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{5488E668-6DB0-4639-AAE9-670D476AAE55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{5488E668-6DB0-4639-AAE9-670D476AAE55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{5488E668-6DB0-4639-AAE9-670D476AAE55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{5488E668-6DB0-4639-AAE9-670D476AAE55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{870E5E3B-BA69-422C-8EB3-37B5625D05D9}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{870E5E3B-BA69-422C-8EB3-37B5625D05D9}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{870E5E3B-BA69-422C-8EB3-37B5625D05D9}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{870E5E3B-BA69-422C-8EB3-37B5625D05D9}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = MythRemoteKeyboard\MythRemoteKeyboard.csproj
+	EndGlobalSection
+EndGlobal
