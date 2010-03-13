@@ -12,14 +12,6 @@
 
 public partial class MainWindow {
     
-    private Gtk.HPaned hpaned1;
-    
-    private Gtk.HBox hbox1;
-    
-    private Gtk.ComboBox Hosts;
-    
-    private Gtk.Label SendKey;
-    
     protected virtual void Build() {
         Stetic.Gui.Initialize(this);
         // Widget MainWindow
@@ -27,38 +19,11 @@ public partial class MainWindow {
         this.Title = Mono.Unix.Catalog.GetString("MainWindow");
         this.WindowPosition = ((Gtk.WindowPosition)(4));
         this.BorderWidth = ((uint)(9));
-        // Container child MainWindow.Gtk.Container+ContainerChild
-        this.hpaned1 = new Gtk.HPaned();
-        this.hpaned1.CanFocus = true;
-        this.hpaned1.Name = "hpaned1";
-        // Container child hpaned1.Gtk.Paned+PanedChild
-        this.hbox1 = new Gtk.HBox();
-        this.hbox1.Name = "hbox1";
-        this.hbox1.Spacing = 6;
-        // Container child hbox1.Gtk.Box+BoxChild
-        this.Hosts = Gtk.ComboBox.NewText();
-        this.Hosts.Name = "Hosts";
-        this.hbox1.Add(this.Hosts);
-        Gtk.Box.BoxChild w1 = ((Gtk.Box.BoxChild)(this.hbox1[this.Hosts]));
-        w1.Position = 0;
-        w1.Expand = false;
-        w1.Fill = false;
-        // Container child hbox1.Gtk.Box+BoxChild
-        this.SendKey = new Gtk.Label();
-        this.SendKey.Name = "SendKey";
-        this.SendKey.LabelProp = Mono.Unix.Catalog.GetString("...");
-        this.hbox1.Add(this.SendKey);
-        Gtk.Box.BoxChild w2 = ((Gtk.Box.BoxChild)(this.hbox1[this.SendKey]));
-        w2.Position = 1;
-        w2.Expand = false;
-        w2.Fill = false;
-        this.hpaned1.Add(this.hbox1);
-        this.Add(this.hpaned1);
         if ((this.Child != null)) {
             this.Child.ShowAll();
         }
         this.DefaultWidth = 400;
-        this.DefaultHeight = 300;
+        this.DefaultHeight = 151;
         this.Show();
         this.DeleteEvent += new Gtk.DeleteEventHandler(this.OnDeleteEvent);
     }

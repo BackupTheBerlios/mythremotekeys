@@ -36,13 +36,9 @@ namespace MythRemoteKeyboard
 				Console.WriteLine (ex.ToString ());
 			}
 		}
-		public List<String> GetFrontendHostnames ()
+		public Dictionary<String, int> GetFrontendHostnames ()
 		{
-			string connectionString = "Server=" + m_DBparams["DBHostName"] + ";" + 
-									  "Database=" + m_DBparams["DBName"] + ";" + 
-									  "User ID=" + m_DBparams["DBUserName"] + ";" + 
-									  "Password=" + m_DBparams["DBPassword"] + ";" + 
-									   "Pooling=false";
+			string connectionString = "Server=" + m_DBparams["DBHostName"] + ";" + "Database=" + m_DBparams["DBName"] + ";" + "User ID=" + m_DBparams["DBUserName"] + ";" + "Password=" + m_DBparams["DBPassword"] + ";" + "Pooling=false";
 			IDbConnection dbcon;
 			dbcon = new MySqlConnection (connectionString);
 			dbcon.Open ();
@@ -50,19 +46,18 @@ namespace MythRemoteKeyboard
 			string sql = "SELECT DISTINCT hostname FROM settings WHERE hostname IS NOT NULL AND value = 'NetworkControlEnabled' AND data = '1'";
 			dbcmd.CommandText = sql;
 			IDataReader reader = dbcmd.ExecuteReader ();
-			List<string> hostnames = new List<string> ();
+			Dictionary<string, int> hosts = new Dictionary<string, int> ();
 			while (reader.Read ()) {
-				hostnames.Add ((string)reader["hostname"]);
+				hosts.Add ((string)reader["hostname"], 6546);
 			}
-			// clean up
 			reader.Close ();
 			reader = null;
 			dbcmd.Dispose ();
-			dbcmd = null;
+			dbcmd = null;	
 			dbcon.Close ();
 			dbcon = null;
 			
-			return hostnames;
+			return hosts;
 		}
 	}
 }

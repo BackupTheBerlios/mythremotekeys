@@ -60,9 +60,10 @@
     <Compile Include="gtk-gui\MainWindow.cs" />
     <Compile Include="Main.cs" />
     <Compile Include="AssemblyInfo.cs" />
-    <Compile Include="MythConnection.cs" />
     <Compile Include="TelnetKeys.cs" />
     <Compile Include="MythDB.cs" />
+    <Compile Include="TelnetConnection.cs" />
+    <Compile Include="Frontend.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
