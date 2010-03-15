@@ -23,12 +23,26 @@ namespace MythRemoteKeyboard
 			if(tranlsateKey(ref gtkKey))
 				return gtkKey;
 			
-			if (gtkKey.Length == 1){
+			if(tryAsDigit(ref gtkKey))
+				return gtkKey;
+			
+			if (gtkKey.Length == 1) 
 				return gtkKey;	
-			}
 			
 			return string.Empty;
 		}
+
+		static bool tryAsDigit (ref string key)
+		{
+			for (int i = 0; i <= 9; i++){
+				if (key == "key_"+i.ToString()){
+					key = i.ToString();
+					return true;
+				}
+			}
+			return false;
+		}
+
 
 		private static bool tranlsateKey (ref string key)
 		{
