@@ -45,14 +45,11 @@ public partial class MainWindow : Gtk.Window
 		Frontend selectedFrontend;
 		TreeIter iter;
 		if (getSelectedFrontend (out iter, out selectedFrontend)) {
-			selectedFrontend.SendKey("escape");
+			//selectedFrontend.SendKey("escape");
 			if (but.Name == "LiveTV")
-				selectedFrontend.SendCommand ("jump livetv"); 
-			else if (but.Name == "Video")
-				selectedFrontend.SendCommand ("jump mythvideo"); 
-			else if (but.Name == "Recordings")
-				selectedFrontend.SendCommand ("jump playbackrecordings"); 
-			else if (but.Name == "Music")
+				selectedFrontend.SendCommand ("jump livetv"); else if (but.Name == "Video")
+				selectedFrontend.SendCommand ("jump mythvideo"); else if (but.Name == "Recordings")
+				selectedFrontend.SendCommand ("jump playbackrecordings"); else if (but.Name == "Music")
 				selectedFrontend.SendCommand ("jump playmusic");
 			
 			m_TreeView.Model.EmitRowChanged (m_TreeView.Model.GetPath (iter), iter);
@@ -63,11 +60,11 @@ public partial class MainWindow : Gtk.Window
 		public myTreeView () : base()
 		{
 		}
-		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
-		{
-			//return base.OnKeyPressEvent (evnt);
-			return true;
-		}
+//		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
+//		{
+//			//return base.OnKeyPressEvent (evnt);
+//			return true;
+//		}
 		
 	}
 	TreeView CreateTreeView ()
@@ -136,6 +133,7 @@ public partial class MainWindow : Gtk.Window
 			selectedFrontend.SendKey (key);
 			m_TreeView.Model.EmitRowChanged (m_TreeView.Model.GetPath (iter), iter);
 		}
+		args.RetVal = true;
 	}
 
 	bool getSelectedFrontend (out TreeIter iter, out Frontend selectedFrontend)
