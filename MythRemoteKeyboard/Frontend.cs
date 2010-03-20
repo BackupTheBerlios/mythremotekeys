@@ -7,7 +7,6 @@ namespace MythRemoteKeyboard
 	{
 		string m_Hostname;
 		int m_Port;
-		bool m_Connected;
 		string m_LastCommand = String.Empty;
 		string m_LastCommandResult = String.Empty;
 		object m_Lock = new object ();
@@ -17,7 +16,7 @@ namespace MythRemoteKeyboard
 			get { return m_Hostname; }
 		}
 		public bool Connected {
-			get { return m_Connected; }
+			get { return m_TelnetConn.Connected; }
 		}
 		public string LastCommandResult {
 			get { return m_LastCommandResult; }
@@ -28,44 +27,45 @@ namespace MythRemoteKeyboard
 		public Frontend (string hostname, int port)
 		{
 			m_Hostname = hostname;
-			m_Port = port;
-			m_TelnetConn = new TelnetConnection ();
+			m_Port = port;	
+		}
+		~Frontend ()
+		{
+			Disconnect();
 		}
 		public void Connect (object status)
 		{
+			m_TelnetConn = new TelnetConnection ();
 			lock (m_Lock) {
 				Console.WriteLine (m_Hostname + ":" + m_Port);
-				if (m_TelnetConn.Connect (m_Hostname, m_Port))
-					m_Connected = true;
+				m_TelnetConn.Connect(m_Hostname, m_Port);
+			}
+		}
+		public void Disconnect(){
+			if (m_TelnetConn != null){
+				SendCommand("exit");
+				m_TelnetConn.Disconnect();	
 			}
 		}
 		public void SendKey (string key)
 		{
-			if (m_Connected && key != string.Empty) {
-				lock (m_Lock) {
-					m_LastCommand = "key " + key;
-					string ans = m_TelnetConn.SendCommand (m_LastCommand);
-					m_LastCommandResult = ans.Replace("\r\n# ",""); //remove telnet prompt..
-				}
+			if (Connected && key != string.Empty) {				
+					string command = "key " + key;
+					SendCommand(command);				
 			}
 		}
-		~Frontend ()
-		{
-			if (m_Connected)
-				m_TelnetConn.Disconnect ();
-		}
-		public override string ToString ()
-		{
-			return string.Format ("[Frontend: Hostname={0}, Connected={1}, LastCommandResult={2}, LastCommand={3}]", Hostname, Connected, LastCommandResult, LastCommand);
-		}
-
-		public void SendCommand (string par1)
+		public void SendCommand (string command)
 		{
 			lock (m_Lock){
-				m_LastCommand = par1;
+				m_LastCommand = command;
 				string ans = m_TelnetConn.SendCommand(m_LastCommand);
 				m_LastCommandResult = ans.Replace("\r\n# ",""); //remove telnet prompt..
 			}
 		}
+		
+		public override string ToString ()
+		{
+			return string.Format ("[Frontend: Hostname={0}, Connected={1}, LastCommandResult={2}, LastCommand={3}]", Hostname, Connected, LastCommandResult, LastCommand);
+		}		
 	}
 }

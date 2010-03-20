@@ -27,6 +27,7 @@ public partial class MainWindow : Gtk.Window
 		actionButtons.Add (createActionButton ("Video"));
 		actionButtons.Add (createActionButton ("Recordings"));
 		actionButtons.Add (createActionButton ("Music"));
+		actionButtons.Add(createActionButton("ReConn"));
 		vBox.Add (actionButtons);
 		this.Add (vBox);
 		this.ShowAll ();
@@ -46,30 +47,27 @@ public partial class MainWindow : Gtk.Window
 		TreeIter iter;
 		if (getSelectedFrontend (out iter, out selectedFrontend)) {
 			//selectedFrontend.SendKey("escape");
-			if (but.Name == "LiveTV")
-				selectedFrontend.SendCommand ("jump livetv"); else if (but.Name == "Video")
-				selectedFrontend.SendCommand ("jump mythvideo"); else if (but.Name == "Recordings")
-				selectedFrontend.SendCommand ("jump playbackrecordings"); else if (but.Name == "Music")
+			if (but.Name == "LiveTV") {
+				selectedFrontend.SendCommand ("jump livetv");
+			} else if (but.Name == "Video") {
+				selectedFrontend.SendCommand ("jump mythvideo");
+			} else if (but.Name == "Recordings") {
+				selectedFrontend.SendCommand ("jump playbackrecordings");
+			} else if (but.Name == "Music") {
 				selectedFrontend.SendCommand ("jump playmusic");
+			}
+			else if ( but.Name == "ReConn"){
+				selectedFrontend.Disconnect();
+				ThreadPool.QueueUserWorkItem(selectedFrontend.Connect);
+			}
 			
 			m_TreeView.Model.EmitRowChanged (m_TreeView.Model.GetPath (iter), iter);
 		}
 	}
-	class myTreeView : TreeView
-	{
-		public myTreeView () : base()
-		{
-		}
-//		protected override bool OnKeyPressEvent (Gdk.EventKey evnt)
-//		{
-//			//return base.OnKeyPressEvent (evnt);
-//			return true;
-//		}
-		
-	}
+	
 	TreeView CreateTreeView ()
 	{
-		TreeView frontendView = new myTreeView ();
+		TreeView frontendView = new TreeView ();
 		frontendView.KeyPressEvent += IgnoreKeyPress;
 		Gtk.TreeViewColumn hostnameCol = new Gtk.TreeViewColumn ();
 		Gtk.CellRendererText hostnameCell = new Gtk.CellRendererText ();
@@ -87,7 +85,8 @@ public partial class MainWindow : Gtk.Window
 		foreach (KeyValuePair<string, int> host in m_DB.GetFrontendHostnames ()) {
 			Frontend foo = new Frontend (host.Key, host.Value);
 			allFrontends.AppendValues (foo);
-			foo.Connect (new object ());
+			ThreadPool.QueueUserWorkItem (foo.Connect);
+			//foo.Connect (new object ());
 		}
 		
 		frontendView.Model = allFrontends;
@@ -99,7 +98,8 @@ public partial class MainWindow : Gtk.Window
 	{
 		Frontend frontend = (Frontend)model.GetValue (iter, 0);
 		if (frontend.Connected == true) {
-			(cell as Gtk.CellRendererText).Foreground = "darkgreen";
+			(cell as Gtk.CellRendererText).Foreground = "lightgreen";
+			//(cell as Gtk.CellRendererText).
 		} else {
 			(cell as Gtk.CellRendererText).Foreground = "grey";
 		}

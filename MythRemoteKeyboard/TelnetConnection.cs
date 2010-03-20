@@ -12,63 +12,70 @@ namespace MythRemoteKeyboard
 		TcpClient tcpClient = null;
 		Stream tcpStream = null;
 		ASCIIEncoding asciiEnc = null;
-		public TelnetConnection ()
-		{
+		public bool Connected {
+			get { return tcpClient.Connected; }
+		}
+		
+		public TelnetConnection (){
 			tcpClient = new TcpClient ();
 			asciiEnc = new ASCIIEncoding ();
 		}
-		public bool Connect (string host){
-			return Connect(host, 6546);	
+		
+		public bool Connect(string host){
+			return Connect (host, 6546);
 		}
-		public bool Connect (string host, int port)
-		{
+		
+		public bool Connect(string host, int port){
 			try {
-				Console.WriteLine ("Connecting to "+host+":"+port+"...");
+				Console.WriteLine ("Connecting to " + host + ":" + port + "...");
 				tcpClient.Connect (host, port);
 				tcpStream = tcpClient.GetStream ();
-				string ans = string.Empty;
-				string foo;
-				while ((foo = ReadAnswer()) != string.Empty)
-				{ans += foo;
-				foo=null;
-				}
+				string ans = ReadAnswer();
 				Console.WriteLine (ans);
 				return true;
 			} catch (Exception e) {
-				Console.WriteLine (host+ " Error..... " + e.StackTrace);
+				Console.WriteLine (host + "failed to connect: " + e.StackTrace);
 				return false;
 			}
-			
 		}
-		public String SendCommand (string command)
-		{
+		
+		public String SendCommand (string command){
+			if (!Connected){
+				return "Not connected, can't send \""+command+"\"";	
+			}
 			command += "\n";
 			byte[] ba = asciiEnc.GetBytes (command);
 			tcpStream.Write (ba, 0, ba.Length);
 			return ReadAnswer ();
 		}
-		private string ReadAnswer ()
-		{
+		
+		private string ReadAnswer (){
 			string readString = String.Empty;
 			byte[] bb = new byte[256];
 			int count;
-			Thread.Sleep(100);
-			while(tcpClient.Available > 0) {
-				count = tcpStream.Read (bb, 0, bb.Length);
-				readString += asciiEnc.GetString(bb,0,count);
-				Thread.Sleep(100);
+			Thread.Sleep (100);
+			try {
+				while (tcpClient.Available > 0) {
+					count = tcpStream.Read (bb, 0, bb.Length);
+					readString += asciiEnc.GetString (bb, 0, count);
+					Thread.Sleep (100);
+				}
+				return readString;
+			} catch (Exception e) {
+				Console.WriteLine (e.ToString ());
+				return "Could not send command.";
 			}
-			return readString;
 		}
-		public void Disconnect(){
-			SendCommand("exit");
-		}
-		~TelnetConnection ()
-		{
-			try{
+		
+		public void Disconnect (){
+			try {
+				tcpStream.Close();
 				tcpClient.Close ();
-			}
-			catch{}
+			} catch {}
+		}
+		
+		~TelnetConnection (){
+			Disconnect();
 		}
 	}
 }
