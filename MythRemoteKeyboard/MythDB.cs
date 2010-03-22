@@ -3,6 +3,8 @@ using System.Data;
 using Gtk;
 using MythRemoteKeyboard;
 using MySql.Data;
+using System.Xml;
+
 using System.Collections.Generic;
 using System.Collections;
 using MySql.Data.MySqlClient;
@@ -19,26 +21,25 @@ namespace MythRemoteKeyboard
 		Hashtable m_DBparams = new Hashtable ();
 		public MythDB ()
 		{
-			try {
-				StreamReader Reader = new StreamReader (m_HomeDir + "/.mythtv/mysql.txt");
-				string line;
-				while ((line = Reader.ReadLine ()) != null) {
-					line = line.Trim ();
-					if (line.StartsWith ("#"))
-						continue;
-					
-					string[] KeyVal = line.Split ('=');
-					if (KeyVal.Length >= 2)
-						m_DBparams[KeyVal[0].Trim ()] = KeyVal[1].Trim ();
-				}
-				
-			} catch (Exception ex) {
-				Console.WriteLine (ex.ToString ());
-			}
+			Console.WriteLine ("Reading configuration:");
+			XmlTextReader reader = new XmlTextReader (m_HomeDir + "/.mythtv/config.xml");
+			string tmpName,tmpValue= String.Empty;
+			while (reader.Read ()) {
+				if (reader.NodeType == XmlNodeType.Element) {
+					tmpName = reader.Name;
+					reader.Read ();
+					if (reader.NodeType == XmlNodeType.Text) {
+						tmpValue = reader.Value;						
+						Console.WriteLine (tmpName + "='" + reader.Value + "'");
+						m_DBparams[tmpName] = reader.Value;											
+					}
+				}								
+			}			
 		}
+
 		public Dictionary<String, int> GetFrontendHostnames ()
 		{
-			string connectionString = "Server=" + m_DBparams["DBHostName"] + ";" + "Database=" + m_DBparams["DBName"] + ";" + "User ID=" + m_DBparams["DBUserName"] + ";" + "Password=" + m_DBparams["DBPassword"] + ";" + "Pooling=false";
+			string connectionString = "Server=" + m_DBparams["DBHostName"] + ";" + "Database=" + m_DBparams["DBName"] + ";" + "User ID=" + m_DBparams["DBUserName"] + ";" + "Password=" + m_DBparams["DBPassword"] + ";" + "Pooling=false";			
 			IDbConnection dbcon;
 			dbcon = new MySqlConnection (connectionString);
 			dbcon.Open ();
@@ -53,7 +54,7 @@ namespace MythRemoteKeyboard
 			reader.Close ();
 			reader = null;
 			dbcmd.Dispose ();
-			dbcmd = null;	
+			dbcmd = null;
 			dbcon.Close ();
 			dbcon = null;
 			
